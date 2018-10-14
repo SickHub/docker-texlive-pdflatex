@@ -9,7 +9,7 @@ Minimal texlive alpine image including pdflatex, European standard classes and l
 * adds pdftex/pdflatex https://en.wikipedia.org/wiki/PdfTeX
 * adds koma-script https://ctan.org/pkg/koma-script
 * adds ntgclass https://ctan.org/pkg/ntgclass
-* adds european babel languages: english, german, french, spanish, polish, italian, portugues, ... (see Dockerfile)
+* adds european babel languages: english, german, french, spanish, polish, italian, portugues, ... (see [Dockerfile](Dockerfile))
 
 ## Build PDF from tex
 
