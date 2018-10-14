@@ -11,7 +11,7 @@ Minimal texlive alpine image including pdflatex, European standard classes and l
 * adds ntgclass https://ctan.org/pkg/ntgclass
 * adds european babel languages: english, german, french, spanish, polish, italian, portugues, ... (see [Dockerfile](Dockerfile))
 
-## Build PDF from tex
+## Manually build a PDF from tex
 
 Use `\usepackage[german]{babel}` in your TeX document
 
@@ -20,3 +20,18 @@ docker run -it --rm -v $PWD:/data drpsychick/texlive-pdflatex pdflatex /data/myl
 ls -la myletter.pdf
 ```
 
+## Automate builds with GitLab-CI
+
+Simple `.gitlab-ci.yml` file to automate building of PDFs and making them available as artifacts
+
+```
+image: drpsychick/texlive-pdflatex
+
+build:
+  script:
+    - find . -name *.tex -exec pdflatex {} ';'
+  artifacts:
+    paths:
+      - "*.pdf"
+    expire_in: 1 day
+```
