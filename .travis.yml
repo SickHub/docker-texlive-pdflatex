@@ -51,6 +51,5 @@ after_success:
     git diff Dockerfile;
     docker build -t $IMAGE:$branch --build-arg ALPINE_VERSION=$ALPINE_VERSION . || exit 1;
     git add Dockerfile && git commit -m "automated tag branch $branch" && git push -u origin $branch;
-    git tag $branch && git push --tags;
     fi;
     fi
