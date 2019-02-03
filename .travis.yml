@@ -12,7 +12,7 @@ env:
 
 before_script:
   - docker build -t test --build-arg ALPINE_VERSION=$ALPINE_VERSION .
-  - export VERSION=$(docker run --rm -it test pdflatex -version |awk '$1 == "pdfTeX" { print $2; exit }')
+  - export VERSION=$(docker run --rm -it test pdflatex -version |awk '$1 == "pdfTeX" { print $2; exit }' |awk -F- '{print $3}')
   - eval $(ssh-agent -s)
   - echo "$DEPLOY_PRIVATE_KEY" | ssh-add - && ssh-add -l
   - git config --global user.email "github@drsick.net"
