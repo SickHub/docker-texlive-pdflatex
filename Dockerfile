@@ -1,4 +1,13 @@
-FROM phipsgabler/texlive-minimal
+ARG ALPINE_VERSION=latest
+FROM frolvlad/alpine-glibc:$ALPINE_VERSION
+
+# credits to https://github.com/phipsgabler/docker-texlive-minimal
+COPY texlive-profile.txt /tmp/
+RUN apk add --no-cache wget perl xz && \
+    wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz && \
+    tar -xzf install-tl-unx.tar.gz && \
+    install-tl-20*/install-tl --profile=/tmp/texlive-profile.txt && \
+    rm -rf install-tl-*
 
 ENV PATH=/usr/local/texlive/bin/x86_64-linuxmusl:$PATH
 
