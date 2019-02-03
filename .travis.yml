@@ -35,7 +35,7 @@ after_success:
     fi
   - >
     if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
-    if [ "$ALPINE_VERSION" = "alpine" ]; then
+    if [ "$ALPINE_VERSION" = "latest" ]; then
     branch="$VERSION"
     curl -H "Content-Type: application/json" --data '{"source_type": "Branch", "source_name": "master"}'
     -X POST "$DOCKERHUB_TRIGGER";
