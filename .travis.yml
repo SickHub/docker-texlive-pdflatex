@@ -36,20 +36,19 @@ after_success:
   - >
     if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
     if [ "$ALPINE_VERSION" = "latest" ]; then
-    branch="$VERSION"
+    branch="$VERSION";
     curl -H "Content-Type: application/json" --data '{"source_type": "Branch", "source_name": "master"}'
     -X POST "$DOCKERHUB_TRIGGER";
     else
     branch="$VERSION-${ALPINE_VERSION}";
     fi;
-    exists="$(test -n "$(git branch -r |grep "$branch")" && echo "exists" || echo "missing")";
-    echo "Branch: $branch ($exists)";
-    if [ "$exists" == "missing" ]; then
+    echo "Branch: $branch";
     git checkout -b $branch;
-    git merge master;
+    git pull origin $branch;
+    git merge -X theirs --no-edit --no-commit master;
     sed -i -e "s/ALPINE_VERSION=.*/ALPINE_VERSION=$ALPINE_VERSION/" Dockerfile;
     git diff Dockerfile;
     docker build -t $IMAGE:$branch --build-arg ALPINE_VERSION=$ALPINE_VERSION . || exit 1;
-    git add Dockerfile && git commit -m "automated tag branch $branch" && git push -u origin $branch;
-    fi;
+    git commit -a -m "automated build on $branch";
+    git push -u origin $branch;
     fi
