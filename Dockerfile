@@ -13,7 +13,7 @@ ENV PATH=/usr/local/texlive/bin/x86_64-linux:/usr/local/texlive/bin/x86_64-linux
 
 # standard latex collection, European standard classes and languages
 RUN tlmgr update --self && \
-    tlmgr install collection-latex collection-fontsrecommended koma-script ntgclass pdftexcmds pdfescape letltxmacro && \
+    tlmgr install collection-latexextra collection-fontsrecommended koma-script ntgclass && \
     tlmgr install \
       babel-basque \
       babel-belarusian \
