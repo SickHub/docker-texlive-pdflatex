@@ -6,7 +6,7 @@ Minimal texlive auto-building alpine image including pdflatex, European standard
 
 * https://hub.docker.com/r/drpsychick/texlive-pdflatex/
 * based on https://hub.docker.com/r/frolvlad/alpine-glibc (inspired by https://github.com/phipsgabler/docker-texlive-minimal)
-* adds pdftex/pdflatex https://en.wikipedia.org/wiki/PdfTeX
+* includes pdftex/pdflatex https://en.wikipedia.org/wiki/PdfTeX
 * adds koma-script https://ctan.org/pkg/koma-script
 * adds ntgclass https://ctan.org/pkg/ntgclass
 * adds european babel languages: english, german, french, spanish, polish, italian, portugues, ... (see [Dockerfile](Dockerfile))
@@ -29,7 +29,9 @@ image: drpsychick/texlive-pdflatex
 
 build:
   script:
-    - find . -name *.tex -exec pdflatex {} ';'
+    - find . -name \*.tex -exec pdflatex {} ';'
+    # fail if number .tex files does not match number of .pdf files
+    - if [ $(find . -name \*.tex |wc -l) -gt $(find . -name \*.pdf |wc -l) ]; then exit 1; fi
   artifacts:
     paths:
       - "*.pdf"
