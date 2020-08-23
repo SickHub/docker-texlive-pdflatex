@@ -41,7 +41,7 @@ script:
   - echo "Alpine $ALPINE_VERSION pdfTeX $VERSION"
   - >
     echo "Running tests...";
-    docker run test pdflatex -version
+    docker run $IMAGE pdflatex -version
 
 after_success:
   - bash deploy.sh
