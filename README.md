@@ -1,6 +1,15 @@
 # [Docker image: texlive-pdflatex](https://hub.docker.com/r/drpsychick/texlive-pdflatex/)
 
-[![DockerHub build status](https://img.shields.io/docker/build/drpsychick/texlive-pdflatex.svg)](https://hub.docker.com/r/drpsychick/texlive-pdflatex/builds/) [![DockerHub build](https://img.shields.io/docker/automated/drpsychick/texlive-pdflatex.svg)](https://hub.docker.com/r/drpsychick/texlive-pdflatex/)
+[![Docker image](https://img.shields.io/docker/image-size/drpsychick/texlive-pdflatex?sort=date)](https://hub.docker.com/r/drpsychick/texlive-pdflatex/tags)
+[![Travis CI](https://img.shields.io/travis/com/DrPsychick/docker-texlive-pdflatex)](https://travis-ci.com/github/DrPsychick/docker-texlive-pdflatex)
+[![DockerHub pulls](https://img.shields.io/docker/pulls/drpsychick/texlive-pdflatex.svg)](https://hub.docker.com/r/drpsychick/texlive-pdflatex/)
+[![DockerHub stars](https://img.shields.io/docker/stars/drpsychick/texlive-pdflatex.svg)](https://hub.docker.com/r/drpsychick/texlive-pdflatex/)
+
+[![license](https://img.shields.io/github/license/drpsychick/docker-texlive-pdflatex.svg)](https://github.com/drpsychick/docker-texlive-pdflatex/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/drpsychick/docker-texlive-pdflatex.svg)](https://github.com/drpsychick/docker-texlive-pdflatex)
+[![Contributors](https://img.shields.io/github/contributors/drpsychick/docker-texlive-pdflatex.svg)](https://github.com/drpsychick/docker-texlive-pdflatex/graphs/contributors)
+[![GitHub issues](https://img.shields.io/github/issues/drpsychick/docker-texlive-pdflatex.svg)](https://github.com/drpsychick/docker-texlive-pdflatex/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/drpsychick/docker-texlive-pdflatex.svg)](https://github.com/drpsychick/docker-texlive-pdflatex/pulls)
 
 Minimal texlive auto-building alpine image including pdflatex, European standard classes and languages
 
