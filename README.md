@@ -4,7 +4,8 @@
 [![Travis CI](https://img.shields.io/travis/com/DrPsychick/docker-texlive-pdflatex)](https://travis-ci.com/github/DrPsychick/docker-texlive-pdflatex)
 [![DockerHub pulls](https://img.shields.io/docker/pulls/drpsychick/texlive-pdflatex.svg)](https://hub.docker.com/r/drpsychick/texlive-pdflatex/)
 [![DockerHub stars](https://img.shields.io/docker/stars/drpsychick/texlive-pdflatex.svg)](https://hub.docker.com/r/drpsychick/texlive-pdflatex/)
-[![Paypal](https://img.shields.io/badge/donate-paypal-00457c.svg?logo=paypal&style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FTXDN7LCDWUEA&source=url)
+[![Paypal](https://img.shields.io/badge/donate-paypal-00457c.svg?logo=paypal)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FTXDN7LCDWUEA&source=url)
+[![GitHub Sponsor](https://img.shields.io/badge/github-sponsor-blue?logo=github)](https://github.com/sponsors/DrPsychick)
 
 [![license](https://img.shields.io/github/license/drpsychick/docker-texlive-pdflatex.svg)](https://github.com/drpsychick/docker-texlive-pdflatex/blob/master/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/drpsychick/docker-texlive-pdflatex.svg)](https://github.com/drpsychick/docker-texlive-pdflatex)
