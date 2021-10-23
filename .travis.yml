@@ -1,5 +1,7 @@
 dist: bionic
 language: bash
+services:
+  - docker
 addons:
   apt:
     sources:
@@ -14,9 +16,10 @@ env:
     - DOCKER_CLI_EXPERIMENTAL=enabled
   matrix:
     - ALPINE_VERSION=latest
+    - ALPINE_VERSION=alpine-3.13
     - ALPINE_VERSION=alpine-3.12
     - ALPINE_VERSION=alpine-3.11
-    - ALPINE_VERSION=alpine-3.10
+    - ALPINE_VERSION=alpine-3
 
 before_script:
   # upgrade to latest docker-ce from repo
