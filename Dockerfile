@@ -50,5 +50,6 @@ RUN tlmgr update --self && \
 
 # mount your .tex files here
 VOLUME ["/data"]
+WORKDIR /data
 
 CMD ["pdflatex"]

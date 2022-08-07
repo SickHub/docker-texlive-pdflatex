@@ -22,6 +22,8 @@ Minimal texlive auto-building alpine image including pdflatex, European standard
 * adds ntgclass https://ctan.org/pkg/ntgclass
 * adds european babel languages: english, german, french, spanish, polish, italian, portugues, ... (see [Dockerfile](Dockerfile))
 
+Example: [source](example/loreipsum.tex) [pdf](example/loreipsum.pdf)
+
 ## Manually build a PDF from tex
 
 Use `\usepackage[german]{babel}` in your TeX document
