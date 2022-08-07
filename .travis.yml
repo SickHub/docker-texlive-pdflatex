@@ -41,10 +41,9 @@ before_script:
 script:
   # test always passes
   - echo "Alpine $ALPINE_VERSION pdfTeX $VERSION"
-  - >
-    echo "Running tests...";
-    docker run --rm $IMAGE pdflatex -version
-    docker run --rm -v $PWD/example:/data $IMAGE pdflatex /data/loreipsum.tex
+  - echo "Running tests...";
+  - docker run --rm $IMAGE pdflatex -version
+  - docker run --rm -v $PWD/example:/data $IMAGE pdflatex /data/loreipsum.tex
 
 after_success:
   - bash deploy.sh
