@@ -35,7 +35,7 @@ before_script:
   - docker buildx inspect --bootstrap
   - docker buildx build --progress plain --platform $PLATFORMS --build-arg ALPINE_VERSION=$ALPINE_VERSION -t $IMAGE .
   # load a single image for local tests, see https://github.com/docker/buildx/issues/59
-  - docker buildx build --progress plain --platform linux/amd64 -t $IMAGE --load .
+  - docker buildx build --progress plain --platform linux/amd64 --build-arg ALPINE_VERSION=$ALPINE_VERSION -t $IMAGE --load .
   - export VERSION=$(docker run --rm $IMAGE pdflatex -version |awk '$1 == "pdfTeX" { print $2; exit }' |awk -F- '{print $3}')
 
 script:
@@ -43,7 +43,8 @@ script:
   - echo "Alpine $ALPINE_VERSION pdfTeX $VERSION"
   - >
     echo "Running tests...";
-    docker run $IMAGE pdflatex -version
+    docker run --rm $IMAGE pdflatex -version
+    docker run --rm -v $PWD/example:/data $IMAGE pdflatex /data/loreipsum.tex
 
 after_success:
   - bash deploy.sh
