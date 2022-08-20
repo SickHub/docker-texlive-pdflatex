@@ -22,7 +22,7 @@ env:
 
 before_script:
   # upgrade to latest docker-ce from repo
-  - sudo apt-get -y upgrade docker-ce
+  #- sudo apt-get -y upgrade docker-ce
   # enable experimental in docker daemon
   - docker_conf=$(sudo cat /etc/docker/daemon.json |jq '. + {"experimental":"enabled"}')
   - echo "$docker_conf" | sudo tee /etc/docker/daemon.json
@@ -43,6 +43,8 @@ script:
   - echo "Alpine $ALPINE_VERSION pdfTeX $VERSION"
   - echo "Running tests...";
   - docker run --rm $IMAGE pdflatex -version
+  - docker run --rm -v $PWD/example:/data $IMAGE pdflatex /data/loreipsum.tex
+  - docker run --rm -v $PWD/example:/data $IMAGE sh -c 'thumbpdf /data/loreipsum.pdf'
   - docker run --rm -v $PWD/example:/data $IMAGE pdflatex /data/loreipsum.tex
 
 after_success:
