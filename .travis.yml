@@ -44,6 +44,8 @@ script:
   - echo "Running tests...";
   - docker run --rm $IMAGE pdflatex -version
   - docker run --rm -v $PWD/example:/data $IMAGE pdflatex /data/loreipsum.tex
+  - docker run --rm -v $PWD/example:/data $IMAGE sh -c 'thumbpdf /data/loreipsum.pdf'
+  - docker run --rm -v $PWD/example:/data $IMAGE pdflatex /data/loreipsum.tex
 
 after_success:
   - bash deploy.sh
