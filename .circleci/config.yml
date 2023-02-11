@@ -53,7 +53,7 @@ jobs:
   build:
     parameters: *parameters
     docker: *docker-dind
-    resource_class: medium
+    resource_class: small
     steps: *build
 
 workflows:
