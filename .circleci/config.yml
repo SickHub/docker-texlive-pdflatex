@@ -1,0 +1,81 @@
+# Required ENV variables
+# DOCKER_USER, DOCKER_PASS
+version: 2.1
+aliases:
+  - &parameters
+    alpine_version:
+      default: latest
+      type: string
+    repo:
+      default: drpsychick
+      type: string
+    tag:
+      default: latest
+      type: string
+  - &docker-dind
+    - image: docker:dind
+  - &build
+    - checkout
+    - setup_remote_docker:
+        version: 20.10.14
+    - run:
+        # plain docker build x86 without cross-platform
+        name: Build images
+        command: |
+          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin &> /dev/null || exit 1
+          export img=texlive-pdflatex
+          if [ "latest" = "<< parameters.alpine_version >>" ]; then
+            # use default ARGs of image
+            echo "Building << parameters.repo >>/$img:<< parameters.tag >>"
+            docker build --progress plain \
+              --tag << parameters.repo >>/$img:<< parameters.tag >> ./$img/
+            docker push << parameters.repo >>/$img:<< parameters.tag >>
+          else
+            # determine source version and target tag
+            VERSION=<< parameters.version >>
+            TAG=<< parameters.ansible_version >>
+            echo "Building << parameters.repo >>/$img:$TAG based on $VERSION"
+            docker build --progress plain \
+              --build-arg ALPINE_VERSION=<< parameters.alpine_version >> \
+              --tag << parameters.repo >>/$img:$TAG ./$img/
+            docker push << parameters.repo >>/$img:$TAG
+          fi
+jobs:
+  build:
+    parameters: *parameters
+    docker: *docker-dind
+    resource_class: small
+    steps: *build
+
+workflows:
+  version: 2
+  build-images:
+    jobs:
+      - build:
+          matrix:
+            parameters:
+              alpine_version: ["latest"]
+      - build:
+          matrix:
+            parameters:
+              alpine_version: ["alpine-3.16", "alpine-3.17"]
+
+  # build other tags monthly
+  monthly:
+    triggers:
+      - schedule:
+          # first day of month, 5:03 am, UTC
+          cron: "3 5 1 * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - build:
+          matrix:
+            parameters:
+              alpine_version: ["latest"]
+      - build:
+          matrix:
+            parameters:
+              alpine_version: ["alpine-3.16", "alpine-3.17"]
