@@ -24,9 +24,8 @@ aliases:
         command: |
           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin &> /dev/null || exit 1
           export img=texlive-pdflatex
-          # determine source version and target tag
-          VERSION=<< parameters.alpine_version >>
           export TAG=<< parameters.alpine_version >>
+          VERSION=<< parameters.alpine_version >>
           echo "Building << parameters.repo >>/$img:$TAG based on $VERSION"
           docker build --progress plain \
             --build-arg ALPINE_VERSION=<< parameters.alpine_version >> \
@@ -34,7 +33,8 @@ aliases:
     - run:
         name: Test images
         command: |
-          # test always passes
+          export img=texlive-pdflatex
+          export TAG=<< parameters.alpine_version >>
           export VERSION=$(docker run --rm $img:$TAG pdflatex -version |awk '$1 == "pdfTeX" { print $2; exit }' |awk -F- '{print $3}')
           echo "Alpine $TAG pdfTeX $VERSION"
           echo "Running tests...";
@@ -44,7 +44,10 @@ aliases:
           docker run --rm -v $PWD/example:/data $img pdflatex /data/loreipsum.tex
     - run:
         name: Push images
-        command: docker push << parameters.repo >>/$img:$TAG
+        command: |
+          export img=texlive-pdflatex
+          export TAG=<< parameters.alpine_version >>
+          docker push << parameters.repo >>/$img:$TAG
 
 jobs:
   build:
