@@ -32,7 +32,7 @@ aliases:
             docker push << parameters.repo >>/$img:<< parameters.tag >>
           else
             # determine source version and target tag
-            VERSION=<< parameters.version >>
+            VERSION=<< parameters.alpine_version >>
             TAG=<< parameters.alpine_version >>
             echo "Building << parameters.repo >>/$img:$TAG based on $VERSION"
             docker build --progress plain \
