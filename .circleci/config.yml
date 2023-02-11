@@ -24,22 +24,28 @@ aliases:
         command: |
           echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin &> /dev/null || exit 1
           export img=texlive-pdflatex
-          if [ "latest" = "<< parameters.alpine_version >>" ]; then
-            # use default ARGs of image
-            echo "Building << parameters.repo >>/$img:<< parameters.tag >>"
-            docker build --progress plain \
-              --tag << parameters.repo >>/$img:<< parameters.tag >> .
-            docker push << parameters.repo >>/$img:<< parameters.tag >>
-          else
-            # determine source version and target tag
-            VERSION=<< parameters.alpine_version >>
-            TAG=<< parameters.alpine_version >>
-            echo "Building << parameters.repo >>/$img:$TAG based on $VERSION"
-            docker build --progress plain \
-              --build-arg ALPINE_VERSION=<< parameters.alpine_version >> \
-              --tag << parameters.repo >>/$img:$TAG .
-            docker push << parameters.repo >>/$img:$TAG
-          fi
+          # determine source version and target tag
+          VERSION=<< parameters.alpine_version >>
+          export TAG=<< parameters.alpine_version >>
+          echo "Building << parameters.repo >>/$img:$TAG based on $VERSION"
+          docker build --progress plain \
+            --build-arg ALPINE_VERSION=<< parameters.alpine_version >> \
+            --tag << parameters.repo >>/$img:$TAG .
+    - run:
+        name: Test images
+        command: |
+          # test always passes
+          export VERSION=$(docker run --rm $img:$TAG pdflatex -version |awk '$1 == "pdfTeX" { print $2; exit }' |awk -F- '{print $3}')
+          echo "Alpine $TAG pdfTeX $VERSION"
+          echo "Running tests...";
+          docker run --rm $img pdflatex -version
+          docker run --rm -v $PWD/example:/data $img pdflatex /data/loreipsum.tex
+          docker run --rm -v $PWD/example:/data $img sh -c 'thumbpdf /data/loreipsum.pdf'
+          docker run --rm -v $PWD/example:/data $img pdflatex /data/loreipsum.tex
+    - run:
+        name: Push images
+        command: docker push << parameters.repo >>/$img:$TAG
+
 jobs:
   build:
     parameters: *parameters
