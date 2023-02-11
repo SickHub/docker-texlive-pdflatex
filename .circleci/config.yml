@@ -35,13 +35,13 @@ aliases:
         command: |
           export img=texlive-pdflatex
           export TAG=<< parameters.alpine_version >>
-          export VERSION=$(docker run --rm $img:$TAG pdflatex -version |awk '$1 == "pdfTeX" { print $2; exit }' |awk -F- '{print $3}')
+          export VERSION=$(docker run --rm << parameters.repo >>/$img:$TAG pdflatex -version |awk '$1 == "pdfTeX" { print $2; exit }' |awk -F- '{print $3}')
           echo "Alpine $TAG pdfTeX $VERSION"
           echo "Running tests...";
           docker run --rm $img pdflatex -version
-          docker run --rm -v $PWD/example:/data $img pdflatex /data/loreipsum.tex
-          docker run --rm -v $PWD/example:/data $img sh -c 'thumbpdf /data/loreipsum.pdf'
-          docker run --rm -v $PWD/example:/data $img pdflatex /data/loreipsum.tex
+          docker run --rm -v $PWD/example:/data << parameters.repo >>/$img:$TAG pdflatex /data/loreipsum.tex
+          docker run --rm -v $PWD/example:/data << parameters.repo >>/$img:$TAG sh -c 'thumbpdf /data/loreipsum.pdf'
+          docker run --rm -v $PWD/example:/data << parameters.repo >>/$img:$TAG pdflatex /data/loreipsum.tex
     - run:
         name: Push images
         command: |
