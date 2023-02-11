@@ -28,7 +28,7 @@ aliases:
             # use default ARGs of image
             echo "Building << parameters.repo >>/$img:<< parameters.tag >>"
             docker build --progress plain \
-              --tag << parameters.repo >>/$img:<< parameters.tag >> ./$img/
+              --tag << parameters.repo >>/$img:<< parameters.tag >> .
             docker push << parameters.repo >>/$img:<< parameters.tag >>
           else
             # determine source version and target tag
@@ -37,7 +37,7 @@ aliases:
             echo "Building << parameters.repo >>/$img:$TAG based on $VERSION"
             docker build --progress plain \
               --build-arg ALPINE_VERSION=<< parameters.alpine_version >> \
-              --tag << parameters.repo >>/$img:$TAG ./$img/
+              --tag << parameters.repo >>/$img:$TAG .
             docker push << parameters.repo >>/$img:$TAG
           fi
 jobs:
@@ -54,11 +54,7 @@ workflows:
       - build:
           matrix:
             parameters:
-              alpine_version: ["latest"]
-      - build:
-          matrix:
-            parameters:
-              alpine_version: ["alpine-3.16", "alpine-3.17"]
+              alpine_version: ["alpine-3.16", "alpine-3.17", "latest"]
 
   # build other tags monthly
   monthly:
@@ -74,8 +70,4 @@ workflows:
       - build:
           matrix:
             parameters:
-              alpine_version: ["latest"]
-      - build:
-          matrix:
-            parameters:
-              alpine_version: ["alpine-3.16", "alpine-3.17"]
+              alpine_version: ["alpine-3.16", "alpine-3.17", "latest"]
