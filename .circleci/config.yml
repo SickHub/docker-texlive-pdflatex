@@ -33,7 +33,7 @@ aliases:
           else
             # determine source version and target tag
             VERSION=<< parameters.version >>
-            TAG=<< parameters.ansible_version >>
+            TAG=<< parameters.alpine_version >>
             echo "Building << parameters.repo >>/$img:$TAG based on $VERSION"
             docker build --progress plain \
               --build-arg ALPINE_VERSION=<< parameters.alpine_version >> \
