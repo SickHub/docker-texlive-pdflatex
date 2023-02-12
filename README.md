@@ -1,7 +1,7 @@
 # [Docker image: texlive-pdflatex](https://hub.docker.com/r/drpsychick/texlive-pdflatex/)
 
 [![Docker image](https://img.shields.io/docker/image-size/drpsychick/texlive-pdflatex?sort=date)](https://hub.docker.com/r/drpsychick/texlive-pdflatex/tags)
-[![Travis CI](https://img.shields.io/travis/com/SickHub/docker-texlive-pdflatex)](https://travis-ci.com/github/SickHub/docker-texlive-pdflatex)
+[![CircleCI](https://img.shields.io/circleci/build/github/SickHub/docker-texlive-pdflatex)](https://app.circleci.com/pipelines/github/SickHub/docker-texlive-pdflatex)
 [![DockerHub pulls](https://img.shields.io/docker/pulls/drpsychick/texlive-pdflatex.svg)](https://hub.docker.com/r/drpsychick/texlive-pdflatex/)
 [![DockerHub stars](https://img.shields.io/docker/stars/drpsychick/texlive-pdflatex.svg)](https://hub.docker.com/r/drpsychick/texlive-pdflatex/)
 [![Paypal](https://img.shields.io/badge/donate-paypal-00457c.svg?logo=paypal)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FTXDN7LCDWUEA&source=url)
