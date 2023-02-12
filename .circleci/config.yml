@@ -38,10 +38,14 @@ aliases:
           export VERSION=$(docker run --rm << parameters.repo >>/$img:$TAG pdflatex -version |awk '$1 == "pdfTeX" { print $2; exit }' |awk -F- '{print $3}')
           echo "Alpine $TAG pdfTeX $VERSION"
           echo "Running tests...";
-          docker run --rm << parameters.repo >>/$img:$TAG pdflatex -version
-          docker run --rm -v $PWD/example:/data << parameters.repo >>/$img:$TAG pdflatex /data/loreipsum.tex
-          docker run --rm -v $PWD/example:/data << parameters.repo >>/$img:$TAG sh -c 'thumbpdf /data/loreipsum.pdf'
-          docker run --rm -v $PWD/example:/data << parameters.repo >>/$img:$TAG pdflatex /data/loreipsum.tex
+          docker run --rm --name pdflatex << parameters.repo >>/$img:$TAG pdflatex -version
+          # dummy container for example files
+          docker create -v /data --name example busybox /bin/true
+          docker cp example/loreipsum.tex example:/data
+          # generate PDF and thumbnails
+          docker run --rm --volumes-from example << parameters.repo >>/$img:$TAG pdflatex /data/loreipsum.tex
+          docker run --rm --volumes-from example << parameters.repo >>/$img:$TAG sh -c 'thumbpdf /data/loreipsum.pdf'
+          docker run --rm --volumes-from example << parameters.repo >>/$img:$TAG pdflatex /data/loreipsum.tex
     - run:
         name: Push images
         command: |
