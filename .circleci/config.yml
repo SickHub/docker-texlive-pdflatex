@@ -17,7 +17,7 @@ aliases:
   - &build
     - checkout
     - setup_remote_docker:
-        version: 20.10.14
+        docker_layer_caching: true
     - run:
         # plain docker build x86 without cross-platform
         name: Build images
