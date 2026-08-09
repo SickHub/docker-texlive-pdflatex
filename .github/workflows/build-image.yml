@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        alpine_version: [alpine-3.16, alpine-3.17, latest]
+        alpine_version: [alpine-3.18, alpine-3.19, latest]
     steps:
       - uses: actions/checkout@v6
 
