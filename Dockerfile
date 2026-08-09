@@ -1,5 +1,8 @@
 ARG ALPINE_VERSION=latest
 FROM frolvlad/alpine-glibc:$ALPINE_VERSION
+LABEL org.opencontainers.image.authors="drpsychick@drsick.net"
+LABEL org.opencontainers.image.description="LaTeX pdflatex compiler on Alpine with full babel support for European languages"
+LABEL org.opencontainers.image.source="https://github.com/SickHub/docker-texlive-pdflatex"
 
 # credits to https://github.com/phipsgabler/docker-texlive-minimal
 COPY texlive-profile.txt /tmp/
