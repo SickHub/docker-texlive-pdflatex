@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [master]
   schedule:
-    # first day of month, 5:03 UTC (matches CircleCI monthly rebuild)
+    # first day of month, 5:03 UTC
     - cron: '3 5 1 * *'
   workflow_dispatch:
 
@@ -34,11 +34,21 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
         if: github.event_name != 'pull_request'
 
+      - name: Log in to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+        if: github.event_name != 'pull_request'
+
       - name: Extract metadata (tags, labels)
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: ${{ env.REGISTRY }}/${{ secrets.DOCKER_USER }}/${{ env.IMAGE_NAME }}
+          images: |
+            ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
+            ${{ env.REGISTRY }}/${{ secrets.DOCKER_USER }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=${{ matrix.alpine_version }}
             type=raw,value=${{ matrix.alpine_version }}-latest
@@ -63,7 +73,7 @@ jobs:
           # build a dummy data volume container for the example files
           docker create -v /data --name example_data busybox /bin/true
           docker cp example/loreipsum.tex example_data:/data
-          # compile → thumbnail → re-compile (same sequence as CircleCI)
+          # compile → thumbnail → re-compile
           docker run --rm --volumes-from example_data ${{ env.REGISTRY }}/${{ secrets.DOCKER_USER }}/${{ env.IMAGE_NAME }}:${{ matrix.alpine_version }} pdflatex /data/loreipsum.tex
           docker run --rm --volumes-from example_data ${{ env.REGISTRY }}/${{ secrets.DOCKER_USER }}/${{ env.IMAGE_NAME }}:${{ matrix.alpine_version }} sh -c 'thumbpdf /data/loreipsum.pdf'
           docker run --rm --volumes-from example_data ${{ env.REGISTRY }}/${{ secrets.DOCKER_USER }}/${{ env.IMAGE_NAME }}:${{ matrix.alpine_version }} pdflatex /data/loreipsum.tex
