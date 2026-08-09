@@ -6,8 +6,8 @@ on:
   pull_request:
     branches: [master]
   schedule:
-    # daily rebuild so base images and dependencies stay current
-    - cron: '0 3 * * *'
+    # first day of month, 5:03 UTC (matches CircleCI monthly rebuild)
+    - cron: '3 5 1 * *'
   workflow_dispatch:
 
 env:
@@ -20,23 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        alpine_version: [latest, alpine-3.15]
+        alpine_version: [alpine-3.16, alpine-3.17, latest]
     steps:
       - uses: actions/checkout@v6
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-        if: github.event_name != 'pull_request'
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -49,9 +38,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: |
-            ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
-            ${{ env.REGISTRY }}/${{ secrets.DOCKER_USER }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ secrets.DOCKER_USER }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=${{ matrix.alpine_version }}
             type=raw,value=${{ matrix.alpine_version }}-latest
@@ -70,10 +57,16 @@ jobs:
       - name: Test pdflatex version
         run: docker run --rm ${{ env.REGISTRY }}/${{ secrets.DOCKER_USER }}/${{ env.IMAGE_NAME }}:${{ matrix.alpine_version }} pdflatex -version
 
-      - name: Test document compilation
+      - name: Test full compile cycle
         if: matrix.alpine_version == 'latest'
         run: |
-          docker run --rm -v ${{ github.workspace }}/example:/data ${{ env.REGISTRY }}/${{ secrets.DOCKER_USER }}/${{ env.IMAGE_NAME }}:latest pdflatex /data/loreipsum.tex
+          # build a dummy data volume container for the example files
+          docker create -v /data --name example_data busybox /bin/true
+          docker cp example/loreipsum.tex example_data:/data
+          # compile → thumbnail → re-compile (same sequence as CircleCI)
+          docker run --rm --volumes-from example_data ${{ env.REGISTRY }}/${{ secrets.DOCKER_USER }}/${{ env.IMAGE_NAME }}:${{ matrix.alpine_version }} pdflatex /data/loreipsum.tex
+          docker run --rm --volumes-from example_data ${{ env.REGISTRY }}/${{ secrets.DOCKER_USER }}/${{ env.IMAGE_NAME }}:${{ matrix.alpine_version }} sh -c 'thumbpdf /data/loreipsum.pdf'
+          docker run --rm --volumes-from example_data ${{ env.REGISTRY }}/${{ secrets.DOCKER_USER }}/${{ env.IMAGE_NAME }}:${{ matrix.alpine_version }} pdflatex /data/loreipsum.tex
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
